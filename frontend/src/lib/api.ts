@@ -124,13 +124,13 @@ export async function startResearch(data: ResearchRequest) {
 }
 
 export async function getResearchResults(jobId: string): Promise<FullResearchReport> {
-  const res = await fetch(`${API_BASE}/research/${jobId}`);
+  const res = await fetch(`${API_BASE}/research/${jobId}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Not found: ${res.statusText}`);
   return res.json();
 }
 
 export async function getResearchHistory(): Promise<{ job_id: string; company_name: string; status: string; created_at: string; intent_score: number | null }[]> {
-  const res = await fetch(`${API_BASE}/research`);
+  const res = await fetch(`${API_BASE}/research`, { cache: "no-store" });
   if (!res.ok) return [];
   return res.json();
 }

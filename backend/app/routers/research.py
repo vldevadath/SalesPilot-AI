@@ -110,7 +110,10 @@ async def stream_research_status(job_id: str):
         queue = _job_events[job_id]
         while True:
             try:
-                event = await asyncio.wait_for(queue.get(), timeout=120)
+                # Use a short 15s timeout to send frequent keepalive pings
+                # This prevents the browser from dropping the SSE connection 
+                # while waiting for slow local Ollama inference
+                event = await asyncio.wait_for(queue.get(), timeout=15)
                 yield {
                     "event": "agent_status",
                     "data": event.model_dump_json(),

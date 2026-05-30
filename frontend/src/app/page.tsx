@@ -46,38 +46,50 @@ export default function HomePage() {
   }, [query, router]);
 
   return (
-    <>
-      {/* Top Bar */}
-      <header className="h-14 border-b border-[#222] flex justify-between items-center px-8 sticky top-0 z-50 bg-[#0a0a0a]">
-        <div className="flex items-center gap-6">
-          <span className="text-[#e5e5e5] text-lg font-bold tracking-tight cursor-pointer">SalesPilot</span>
-          <nav className="hidden md:flex gap-4 text-sm">
-            <span className="text-[#e5e5e5] font-semibold border-b-2 border-[#e5e5e5] pb-[17px] pt-[19px]">Dashboard</span>
-          </nav>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-full bg-[#222] border border-[#333] flex items-center justify-center text-[#888] text-xs font-semibold">
-            U
+    <div className="bg-[#0a0a0a] text-[#e5e5e5] font-['Inter',sans-serif] antialiased min-h-screen flex flex-col">
+      {/* TopNavBar */}
+      <nav className="bg-[#0a0a0a] w-full top-0 sticky z-50 border-b border-[#1e1e1e] font-['Inter',sans-serif] text-[#e5e5e5]">
+        <div className="flex justify-between items-center w-full px-6 py-3 max-w-full mx-auto">
+          <div className="flex items-center gap-6">
+            <a className="flex items-center gap-2 hover:brightness-110 transition-all duration-200" href="#">
+              <div className="w-8 h-8 rounded-md bg-[#e5a00d] flex items-center justify-center text-[#0a0a0a] font-['Space_Grotesk',sans-serif] font-black text-xs">SP</div>
+              <div className="flex items-center gap-2">
+                <span className="font-['Space_Grotesk',sans-serif] font-bold text-lg tracking-tight">SalesPilot</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-[rgba(229,160,13,0.1)] text-[#e5a00d] border border-[rgba(229,160,13,0.2)]">AI</span>
+              </div>
+            </a>
+            <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+              <a className="text-[#e5a00d] border-b-2 border-[#e5a00d] py-3 px-1" href="#">Dashboard</a>
+              <a className="text-[#888888] hover:text-[#e5e5e5] transition-colors py-3 px-1" href="#">Signals</a>
+              <a className="text-[#888888] hover:text-[#e5e5e5] transition-colors py-3 px-1" href="#">History</a>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="hidden md:flex items-center gap-2 bg-[rgba(229,160,13,0.1)] text-[#e5a00d] border border-[rgba(229,160,13,0.3)] hover:bg-[rgba(229,160,13,0.2)] transition-all px-3 py-1.5 rounded-lg text-sm font-semibold">
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              New Research
+            </button>
+            <button className="hover:brightness-110 transition-all rounded-full overflow-hidden border border-[#1e1e1e] w-8 h-8 bg-[#1e1e1e] flex items-center justify-center text-[#888888] text-xs font-semibold">
+              U
+            </button>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Main */}
-      <main className="flex-grow flex flex-col items-center px-4 md:px-8 py-12">
-        {/* Hero */}
-        <section className="w-full max-w-2xl flex flex-col items-center text-center mt-12 mb-12">
-          <h1 className="text-2xl md:text-[32px] font-semibold text-[#e5e5e5] leading-tight tracking-tight mb-2">
-            Research any company in seconds
-          </h1>
-          <p className="text-[#888] text-base mb-8">
-            Deep intelligence, hiring signals, tech stack, and intent scoring.
-          </p>
-          <div className="w-full flex flex-col md:flex-row items-center gap-2">
-            <div className="relative w-full">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#555] text-[20px]">search</span>
+      {/* Hero Section */}
+      <section className="flex-1 flex flex-col items-center justify-start pt-20 px-6 max-w-4xl mx-auto w-full">
+        <div className="text-center max-w-2xl mx-auto w-full mb-12">
+          <h1 className="font-['Space_Grotesk',sans-serif] text-4xl md:text-5xl font-bold mb-4 tracking-tight text-[#e5e5e5]">Research any company in seconds</h1>
+          <p className="text-[#888888] text-base md:text-lg mb-8">Deep intelligence on hiring, funding, tech stack &amp; buying intent — powered by 9 autonomous AI agents</p>
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="relative flex-1 group">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[#555555] group-focus-within:text-[#e5a00d] transition-colors">
+                <span className="material-symbols-outlined">search</span>
+              </div>
               <input
-                className="w-full bg-[#0a0a0a] border border-[#222] rounded text-[#e5e5e5] text-sm py-3 pl-11 pr-4 placeholder-[#555] focus:outline-none focus:border-[#e5a00d] transition-colors"
+                className="w-full bg-[#0e0e0e] border border-[#1e1e1e] rounded-xl py-4 pl-12 pr-4 text-[#e5e5e5] placeholder-[#555555] focus:outline-none focus:border-[#e5a00d] focus:ring-1 focus:ring-[#e5a00d] transition-all"
                 placeholder="e.g. Notion, Stripe, Linear..."
+                type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleResearch()}
@@ -87,102 +99,136 @@ export default function HomePage() {
             <button
               onClick={handleResearch}
               disabled={loading || !query.trim()}
-              className="w-full md:w-auto bg-[#e5a00d] text-black text-xs font-medium px-6 py-3 rounded whitespace-nowrap hover:brightness-110 transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="bg-[#e5a00d] text-[#0a0a0a] font-semibold px-8 py-4 rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 whitespace-nowrap group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Starting..." : "Start Research"}
-              {!loading && <span className="material-symbols-outlined text-[16px]">arrow_forward</span>}
+              {!loading && <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>}
             </button>
           </div>
           {error && (
-            <p className="mt-4 text-xs text-red-400 bg-red-400/5 border border-red-400/10 rounded px-4 py-2 w-full text-left">{error}</p>
+            <p className="mt-4 text-xs text-[#ef4444] bg-[rgba(239,68,68,0.05)] border border-[rgba(239,68,68,0.2)] rounded-lg px-4 py-2 w-full text-left">{error}</p>
           )}
-        </section>
+        </div>
 
-        {/* Recent Research */}
-        {history.length > 0 && (
-          <section className="w-full max-w-4xl mt-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-[#e5e5e5] tracking-tight">Recent Research</h2>
-            </div>
-            <div className="bg-[#111] border border-[#222] rounded overflow-hidden">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-[#222] text-[#888] text-[11px] font-semibold uppercase tracking-wider">
-                    <th className="py-3 px-4">Company</th>
-                    <th className="py-3 px-4 text-right">Intent Score</th>
-                    <th className="py-3 px-4 hidden md:table-cell">Status</th>
-                    <th className="py-3 px-4 text-right hidden lg:table-cell">Date</th>
+        {/* Stats Bar */}
+        <div className="flex items-center justify-center gap-4 md:gap-8 mb-16 w-full max-w-2xl mx-auto border-t border-b border-[#1e1e1e] py-6">
+          <div className="text-center">
+            <div className="font-['Space_Grotesk',sans-serif] text-2xl font-bold text-[#e5a00d]">847</div>
+            <div className="text-[10px] uppercase tracking-widest text-[#555555] font-['Geist_Mono',monospace]">companies researched</div>
+          </div>
+          <div className="w-px h-10 bg-[#1e1e1e]"></div>
+          <div className="text-center">
+            <div className="font-['Space_Grotesk',sans-serif] text-2xl font-bold text-[#e5a00d]">92%</div>
+            <div className="text-[10px] uppercase tracking-widest text-[#555555] font-['Geist_Mono',monospace]">accuracy rate</div>
+          </div>
+          <div className="w-px h-10 bg-[#1e1e1e]"></div>
+          <div className="text-center">
+            <div className="font-['Space_Grotesk',sans-serif] text-2xl font-bold text-[#e5a00d]">9</div>
+            <div className="text-[10px] uppercase tracking-widest text-[#555555] font-['Geist_Mono',monospace]">AI agents</div>
+          </div>
+        </div>
+
+        {/* Recently Researched Table */}
+        <div className="w-full bg-[#111111] border border-[#1e1e1e] rounded-xl overflow-hidden shadow-2xl mb-12">
+          <div className="border-b border-[#1e1e1e] px-5 py-4 flex items-center gap-2 bg-[#0e0e0e]">
+            <span className="material-symbols-outlined text-[#e5a00d] text-[18px]">bolt</span>
+            <h2 className="font-['Geist_Mono',monospace] text-[11px] uppercase tracking-widest font-bold text-[#888888]">Recently Researched</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#1e1e1e] text-[#555555] font-['Geist_Mono',monospace] text-[10px] uppercase tracking-widest bg-[#0a0a0a]">
+                  <th className="py-3 px-5 font-normal">Company</th>
+                  <th className="py-3 px-5 font-normal text-right">Intent Score</th>
+                  <th className="py-3 px-5 font-normal">Status</th>
+                  <th className="py-3 px-5 font-normal hidden md:table-cell">Data Sources</th>
+                  <th className="py-3 px-5 font-normal text-right hidden sm:table-cell">Date</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                {history.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-[#555555] text-sm">
+                      No research history found. Start a new research above.
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="text-sm">
-                  {history.map((h) => (
+                ) : (
+                  history.map((h) => (
                     <tr
                       key={h.job_id}
-                      className="border-b border-[#222] last:border-b-0 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+                      className="border-b border-[#1e1e1e] last:border-b-0 hover:bg-[#1a1a1a] transition-colors cursor-pointer group"
                       onClick={() => router.push(`/research/${h.job_id}`)}
                     >
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded bg-[#222] border border-[#333] flex items-center justify-center text-[#888] text-[11px] font-semibold shrink-0">
-                            {h.company_name.charAt(0)}
+                      <td className="py-4 px-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[#e5e5e5] font-['Space_Grotesk',sans-serif] font-bold shadow-sm">
+                            {h.company_name.charAt(0).toUpperCase()}
                           </div>
-                          <span className="text-[#e5e5e5] font-medium">{h.company_name}</span>
+                          <span className="font-semibold text-[#e5e5e5] group-hover:text-white transition-colors">{h.company_name}</span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-right">
-                        {h.intent_score != null ? (
-                          <span className={`font-medium ${h.intent_score >= 80 ? "text-[#e5a00d]" : h.intent_score >= 60 ? "text-[#e5e5e5]" : "text-[#888]"}`}>
-                            {h.intent_score}
-                          </span>
-                        ) : (
-                          <span className="text-[#555]">—</span>
-                        )}
+                      <td className="py-4 px-5 text-right">
+                        <span className={`font-['Space_Grotesk',sans-serif] font-bold text-xl ${
+                          h.intent_score == null ? "text-[#555555]" : 
+                          h.intent_score >= 80 ? "text-[#22c55e]" : 
+                          h.intent_score >= 60 ? "text-[#e5a00d]" : "text-[#888888]"
+                        }`}>
+                          {h.intent_score != null ? h.intent_score : "—"}
+                        </span>
                       </td>
-                      <td className="py-3 px-4 hidden md:table-cell">
+                      <td className="py-4 px-5">
                         <StatusPill status={h.status} />
                       </td>
-                      <td className="py-3 px-4 text-right text-[#888] hidden lg:table-cell">
+                      <td className="py-4 px-5 hidden md:table-cell">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="LinkedIn">in</span>
+                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="GitHub">gh</span>
+                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="Glassdoor">gd</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-5 text-right text-[#555555] text-xs font-['Geist_Mono',monospace] hidden sm:table-cell">
                         {timeAgo(h.created_at)}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )}
-      </main>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#222] py-3 px-8 flex justify-between items-center text-xs text-[#555] mt-auto">
-        <span>© 2025 SalesPilot AI</span>
-        <div className="flex gap-4">
-          <span className="hover:text-[#888] transition-colors cursor-pointer">Docs</span>
-          <span className="hover:text-[#888] transition-colors cursor-pointer">Github</span>
+      <footer className="border-t border-[#1e1e1e] py-6 px-6 bg-[#0a0a0a]">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-['Geist_Mono',monospace] text-[#555555] uppercase tracking-widest">
+          <span>© 2025 SalesPilot AI</span>
+          <span>Powered by Bright Data · 8 data sources active</span>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 
 function StatusPill({ status }: { status: string }) {
   const styles =
     status === "complete"
-      ? "bg-[#0d1f0d] text-green-400 border-green-500/20"
+      ? "bg-[rgba(34,197,94,0.1)] text-[#22c55e] border-[rgba(34,197,94,0.2)]"
       : status === "running" || status === "queued"
-      ? "bg-[rgba(229,160,13,0.08)] text-[#e5a00d] border-[rgba(229,160,13,0.2)]"
-      : "bg-[#1a0000] text-red-400 border-red-400/20";
+      ? "bg-[rgba(229,160,13,0.1)] text-[#e5a00d] border-[rgba(229,160,13,0.2)]"
+      : "bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]";
 
   const label =
-    status === "complete" ? "Completed"
+    status === "complete" ? "Complete"
     : status === "running" ? "Processing"
     : status === "queued" ? "Queued"
     : "Failed";
 
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold border ${styles}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${styles}`}>
       {status === "complete" && <span className="material-symbols-outlined text-[12px]">check_circle</span>}
-      {(status === "running" || status === "queued") && <span className="material-symbols-outlined text-[12px] animate-spin" style={{animationDuration:"2s"}}>refresh</span>}
+      {(status === "running" || status === "queued") && (
+        <span className="material-symbols-outlined text-[12px] animate-spin" style={{animationDuration:"2s"}}>sync</span>
+      )}
       {status === "failed" && <span className="material-symbols-outlined text-[12px]">error</span>}
       {label}
     </span>

@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     # Cerebras - 3rd fallback (fast, separate quota)
     cerebras_api_key: str = ""
 
+    # NVIDIA - 3.5th fallback
+    nvidia_api_key: str = ""
+
     # OpenRouter - 4th fallback (free models)
     openrouter_api_key: str = ""
 

@@ -17,10 +17,10 @@ class AgentStatus(str, Enum):
 
 
 class OutreachFormat(str, Enum):
-    ENTERPRISE = "enterprise"
-    STARTUP = "startup"
-    CONSULTATIVE = "consultative"
-    CHALLENGER = "challenger"
+    PAIN_POINT = "pain_point"
+    ROI = "roi"
+    NEWS_HOOK = "news_hook"
+    MUTUAL_CONNECTION = "mutual_connection"
 
 
 class JobStatus(str, Enum):
@@ -51,13 +51,37 @@ class CompanyProfile(BaseModel):
     business_model: Optional[str] = None
     leadership: list[Any] = Field(default_factory=list)
     key_facts: list[str] = Field(default_factory=list)
+    glassdoor_rating: Optional[float] = None
+    github_stars: Optional[int] = None
+    github_commits_30d: Optional[int] = None
+    linkedin_employee_trend: Optional[str] = None
 
-    @field_validator("employee_count", "revenue_estimate", "headquarters", "founded", "business_model", mode="before")
+    @field_validator("employee_count", "revenue_estimate", "headquarters", "founded", "business_model", "linkedin_employee_trend", mode="before")
     @classmethod
     def coerce_to_str(cls, v):
         if v is None:
             return None
         return str(v)
+
+    @field_validator("glassdoor_rating", mode="before")
+    @classmethod
+    def coerce_rating(cls, v):
+        if v is None:
+            return None
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            return None
+
+    @field_validator("github_stars", "github_commits_30d", mode="before")
+    @classmethod
+    def coerce_github_int(cls, v):
+        if v is None:
+            return None
+        try:
+            return int(v)
+        except (ValueError, TypeError):
+            return None
 
 
 class HiringSignals(BaseModel):
@@ -214,6 +238,8 @@ class OutreachDraft(BaseModel):
     subject: str = ""
     body: str = ""
     key_personalization_points: list[str] = Field(default_factory=list)
+    predicted_response_rate: Optional[int] = None
+    strategy_rationale: str = ""
 
     @field_validator("format_type", mode="before")
     @classmethod
@@ -221,6 +247,16 @@ class OutreachDraft(BaseModel):
         if isinstance(v, str):
             return v.lower()
         return str(v)
+
+    @field_validator("predicted_response_rate", mode="before")
+    @classmethod
+    def coerce_response_rate(cls, v):
+        if v is None:
+            return None
+        try:
+            return max(1, min(100, int(v)))
+        except (ValueError, TypeError):
+            return None
 
 
 # ─── Aggregated Report ───────────────────────────────────
@@ -243,6 +279,7 @@ class FullResearchReport(BaseModel):
 
     crm_synced: bool = False
     crm_record_id: Optional[str] = None
+    data_sources: list[str] = Field(default_factory=list)
 
 
 # ─── SSE Status Events ───────────────────────────────────

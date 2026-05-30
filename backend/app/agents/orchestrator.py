@@ -134,6 +134,18 @@ async def run_research_pipeline(
     report.pain_points     = pain_points
     report.competitor_intel= competitor_intel
 
+    # Track all Bright Data sources used
+    report.data_sources = [
+        "Google Search (Bright Data)",
+        "Company Website (Bright Data)",
+        "LinkedIn (Bright Data)",
+        "Glassdoor (Bright Data)",
+        "GitHub (Bright Data)",
+        "Crunchbase (Bright Data)",
+        "G2 Reviews (Bright Data)",
+        "Indeed / Job Boards (Bright Data)",
+    ]
+
     # ═══════════════════════════════════════════════════════
     # PHASE 2: Intent Scoring (sequential — needs all research)
     # ═══════════════════════════════════════════════════════

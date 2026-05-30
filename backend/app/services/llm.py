@@ -75,6 +75,22 @@ class LLMService:
             max_tokens=4096,
         ) if settings.groq_api_key else None
 
+        self.cerebras = ChatOpenAI(
+            model="llama3.1-8b",
+            api_key=settings.cerebras_api_key,
+            base_url="https://api.cerebras.ai/v1",
+            temperature=0.3,
+            max_tokens=2048,
+        ) if getattr(settings, "cerebras_api_key", None) else None
+
+        self.nvidia = ChatOpenAI(
+            model="mistralai/mistral-large-3-675b-instruct-2512",
+            api_key=settings.nvidia_api_key,
+            base_url="https://integrate.api.nvidia.com/v1",
+            temperature=0.15,
+            max_tokens=2048,
+        ) if getattr(settings, "nvidia_api_key", None) else None
+
         # Create multiple OpenRouter clients with different free models
         self.openrouter_clients = []
         if settings.openrouter_api_key:
@@ -92,7 +108,9 @@ class LLMService:
                 ))
         self.openrouter = self.openrouter_clients[0] if self.openrouter_clients else None
 
-        active = [n for n, v in [("Gemini", self.gemini), ("Groq", self.groq), ("OpenRouter", self.openrouter)] if v]
+
+
+        active = [n for n, v in [("NVIDIA", self.nvidia), ("Gemini", self.gemini), ("Groq", self.groq), ("Cerebras", self.cerebras), ("OpenRouter", self.openrouter)] if v]
         print(f"   LLM chain: {' → '.join(active)}")
 
     def _build_messages(self, system_prompt: str, user_prompt: str, example: str):
@@ -110,14 +128,19 @@ class LLMService:
         messages = self._build_messages(system_prompt, user_prompt, example)
 
         providers = []
+        if getattr(self, "nvidia", None):
+            providers.append(("NVIDIA", self.nvidia))
         if self.gemini:
             providers.append(("Gemini", self.gemini))
         if self.groq:
             providers.append(("Groq", self.groq))
-        # Try all OpenRouter free models as last resort
+        if getattr(self, "cerebras", None):
+            providers.append(("Cerebras", self.cerebras))
+        # Try all OpenRouter free models
         for i, or_client in enumerate(self.openrouter_clients):
             model_name = OPENROUTER_MODELS[i].split("/")[-1]
             providers.append((f"OpenRouter({model_name})", or_client))
+
 
         for provider_name, llm in providers:
             try:
@@ -143,12 +166,17 @@ class LLMService:
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=user_prompt)]
 
         providers = []
+        if getattr(self, "nvidia", None):
+            providers.append(("NVIDIA", self.nvidia))
         if self.gemini:
             providers.append(("Gemini", self.gemini))
         if self.groq:
             providers.append(("Groq", self.groq))
+        if getattr(self, "cerebras", None):
+            providers.append(("Cerebras", self.cerebras))
         if self.openrouter:
             providers.append(("OpenRouter", self.openrouter))
+
 
         for provider_name, llm in providers:
             try:
