@@ -11,7 +11,22 @@ export default function HomePage() {
   const [history, setHistory] = useState<
     { job_id: string; company_name: string; status: string; created_at: string; intent_score: number | null }[]
   >([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [compareMode, setCompareMode] = useState(false);
   const router = useRouter();
+
+  const toggleSelect = useCallback((jobId: string, status: string) => {
+    if (status !== "complete") return;
+    setSelected(prev => {
+      if (prev.includes(jobId)) return prev.filter(id => id !== jobId);
+      if (prev.length >= 2) return [prev[1], jobId];
+      return [...prev, jobId];
+    });
+  }, []);
+
+  const handleCompare = useCallback(() => {
+    if (selected.length === 2) router.push(`/compare/${selected[0]}/${selected[1]}`);
+  }, [selected, router]);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
@@ -130,14 +145,28 @@ export default function HomePage() {
 
         {/* Recently Researched Table */}
         <div className="w-full bg-[#111111] border border-[#1e1e1e] rounded-xl overflow-hidden shadow-2xl mb-12">
-          <div className="border-b border-[#1e1e1e] px-5 py-4 flex items-center gap-2 bg-[#0e0e0e]">
-            <span className="material-symbols-outlined text-[#e5a00d] text-[18px]">bolt</span>
-            <h2 className="font-['Geist_Mono',monospace] text-[11px] uppercase tracking-widest font-bold text-[#888888]">Recently Researched</h2>
+          <div className="border-b border-[#1e1e1e] px-5 py-4 flex items-center justify-between bg-[#0e0e0e]">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-[#e5a00d] text-[18px]">bolt</span>
+              <h2 className="font-['Geist_Mono',monospace] text-[11px] uppercase tracking-widest font-bold text-[#888888]">Recently Researched</h2>
+            </div>
+            <button
+              onClick={() => { setCompareMode(m => !m); setSelected([]); }}
+              className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+                compareMode
+                  ? "bg-[rgba(229,160,13,0.15)] text-[#e5a00d] border-[rgba(229,160,13,0.3)]"
+                  : "border-[#1e1e1e] text-[#555555] hover:text-[#e5e5e5] hover:border-[#333333]"
+              }`}
+            >
+              <span className="material-symbols-outlined text-[15px]">compare_arrows</span>
+              {compareMode ? "Cancel Compare" : "Compare"}
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-[#1e1e1e] text-[#555555] font-['Geist_Mono',monospace] text-[10px] uppercase tracking-widest bg-[#0a0a0a]">
+                  {compareMode && <th className="py-3 pl-5 pr-2 font-normal w-10"></th>}
                   <th className="py-3 px-5 font-normal">Company</th>
                   <th className="py-3 px-5 font-normal text-right">Intent Score</th>
                   <th className="py-3 px-5 font-normal">Status</th>
@@ -153,49 +182,109 @@ export default function HomePage() {
                     </td>
                   </tr>
                 ) : (
-                  history.map((h) => (
-                    <tr
-                      key={h.job_id}
-                      className="border-b border-[#1e1e1e] last:border-b-0 hover:bg-[#1a1a1a] transition-colors cursor-pointer group"
-                      onClick={() => router.push(`/research/${h.job_id}`)}
-                    >
-                      <td className="py-4 px-5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[#e5e5e5] font-['Space_Grotesk',sans-serif] font-bold shadow-sm">
-                            {h.company_name.charAt(0).toUpperCase()}
+                  history.map((h) => {
+                    const isSelected = selected.includes(h.job_id);
+                    const isComplete = h.status === "complete";
+                    const isDisabled = compareMode && !isComplete;
+                    return (
+                      <tr
+                        key={h.job_id}
+                        className={`border-b border-[#1e1e1e] last:border-b-0 transition-colors ${
+                          isDisabled ? "opacity-40 cursor-not-allowed" :
+                          isSelected ? "bg-[rgba(229,160,13,0.05)] border-l-2 border-l-[#e5a00d] cursor-pointer" :
+                          "hover:bg-[#1a1a1a] cursor-pointer"
+                        } group`}
+                        onClick={() => compareMode ? toggleSelect(h.job_id, h.status) : router.push(`/research/${h.job_id}`)}
+                      >
+                        {compareMode && (
+                          <td className="pl-5 pr-2 py-4" onClick={e => e.stopPropagation()}>
+                            <div
+                              onClick={() => toggleSelect(h.job_id, h.status)}
+                              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                                !isComplete ? "border-[#333] cursor-not-allowed" :
+                                isSelected ? "bg-[#e5a00d] border-[#e5a00d]" : "border-[#333] hover:border-[#e5a00d] cursor-pointer"
+                              }`}
+                            >
+                              {isSelected && <span className="material-symbols-outlined text-black text-[13px] font-bold">check</span>}
+                            </div>
+                          </td>
+                        )}
+                        <td className="py-4 px-5">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-lg border flex items-center justify-center font-['Space_Grotesk',sans-serif] font-bold shadow-sm ${
+                              isSelected ? "bg-[rgba(229,160,13,0.15)] border-[rgba(229,160,13,0.3)] text-[#e5a00d]" : "bg-[#0e0e0e] border-[#1e1e1e] text-[#e5e5e5]"
+                            }`}>
+                              {h.company_name.charAt(0).toUpperCase()}
+                            </div>
+                            <span className={`font-semibold transition-colors ${
+                              isSelected ? "text-[#e5a00d]" : "text-[#e5e5e5] group-hover:text-white"
+                            }`}>{h.company_name}</span>
                           </div>
-                          <span className="font-semibold text-[#e5e5e5] group-hover:text-white transition-colors">{h.company_name}</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-5 text-right">
-                        <span className={`font-['Space_Grotesk',sans-serif] font-bold text-xl ${
-                          h.intent_score == null ? "text-[#555555]" : 
-                          h.intent_score >= 80 ? "text-[#22c55e]" : 
-                          h.intent_score >= 60 ? "text-[#e5a00d]" : "text-[#888888]"
-                        }`}>
-                          {h.intent_score != null ? h.intent_score : "—"}
-                        </span>
-                      </td>
-                      <td className="py-4 px-5">
-                        <StatusPill status={h.status} />
-                      </td>
-                      <td className="py-4 px-5 hidden md:table-cell">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="LinkedIn">in</span>
-                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="GitHub">gh</span>
-                          <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="Glassdoor">gd</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-5 text-right text-[#555555] text-xs font-['Geist_Mono',monospace] hidden sm:table-cell">
-                        {timeAgo(h.created_at)}
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td className="py-4 px-5 text-right">
+                          <span className={`font-['Space_Grotesk',sans-serif] font-bold text-xl ${
+                            h.intent_score == null ? "text-[#555555]" :
+                            h.intent_score >= 80 ? "text-[#22c55e]" :
+                            h.intent_score >= 60 ? "text-[#e5a00d]" : "text-[#888888]"
+                          }`}>
+                            {h.intent_score != null ? h.intent_score : "—"}
+                          </span>
+                        </td>
+                        <td className="py-4 px-5">
+                          <StatusPill status={h.status} />
+                        </td>
+                        <td className="py-4 px-5 hidden md:table-cell">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="LinkedIn">in</span>
+                            <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="GitHub">gh</span>
+                            <span className="w-4 h-4 rounded bg-[#0e0e0e] border border-[#1e1e1e] flex items-center justify-center text-[10px] text-[#888] cursor-help" title="Glassdoor">gd</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-5 text-right text-[#555555] text-xs font-['Geist_Mono',monospace] hidden sm:table-cell">
+                          {timeAgo(h.created_at)}
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* Compare floating bar */}
+        {compareMode && (
+          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+            selected.length > 0 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
+          }`}>
+            <div className="flex items-center gap-4 bg-[#111111] border border-[#1e1e1e] rounded-2xl px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-md">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="material-symbols-outlined text-[#e5a00d] text-[20px]">compare_arrows</span>
+                <span className="text-[#888888]">
+                  {selected.length === 1 ? (
+                    <><span className="text-[#e5e5e5] font-semibold">1</span> selected — pick 1 more</>
+                  ) : (
+                    <><span className="text-[#22c55e] font-semibold">2</span> companies ready to compare</>
+                  )}
+                </span>
+              </div>
+              <button
+                onClick={handleCompare}
+                disabled={selected.length < 2}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#e5a00d] text-black font-bold text-sm hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+                Generate Report
+              </button>
+              <button
+                onClick={() => setSelected([])}
+                className="text-[#555555] hover:text-[#e5e5e5] transition-colors"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Footer */}

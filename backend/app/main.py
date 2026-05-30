@@ -41,6 +41,7 @@ app.add_middleware(
 # Mount routers
 app.include_router(research.router, prefix="/api", tags=["Research"])
 app.include_router(crm.router, prefix="/api", tags=["CRM"])
+app.include_router(compare.router, prefix="/api", tags=["Compare"])
 
 
 @app.get("/")

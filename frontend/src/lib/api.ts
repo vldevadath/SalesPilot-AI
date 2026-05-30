@@ -111,6 +111,30 @@ export interface FullResearchReport {
   crm_synced: boolean;
 }
 
+export interface DimensionComparison {
+  dimension: string;
+  company_a_value: string;
+  company_b_value: string;
+  winner: "a" | "b" | "tie";
+  rationale: string;
+}
+
+export interface ComparisonReport {
+  company_a: string;
+  company_b: string;
+  winner: "a" | "b";
+  winner_company_name: string;
+  confidence: string;
+  win_margin: string;
+  executive_summary: string;
+  dimensions: DimensionComparison[];
+  top_reasons_winner: string[];
+  top_risks_winner: string[];
+  recommended_action: string;
+  score_a: number;
+  score_b: number;
+}
+
 /* ─── API calls ─── */
 
 export async function startResearch(data: ResearchRequest) {
@@ -160,4 +184,14 @@ export function streamResearch(
   });
   es.onerror = () => { es.close(); onError("Connection lost"); };
   return es;
+}
+
+export async function compareCompanies(jobIdA: string, jobIdB: string): Promise<ComparisonReport> {
+  const res = await fetch(`${API_BASE}/compare`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ job_id_a: jobIdA, job_id_b: jobIdB }),
+  });
+  if (!res.ok) throw new Error(`Compare failed: ${res.statusText}`);
+  return res.json();
 }
