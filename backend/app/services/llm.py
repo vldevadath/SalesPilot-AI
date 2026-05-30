@@ -24,11 +24,11 @@ EXAMPLES = {
     "OutreachDraft": '{"format_type":"enterprise","subject":"Optimizing Operations at Acme Corp","body":"Hi [Name],\\n\\nI noticed Acme Corp recently raised a Series C...","key_personalization_points":["Series C funding","45 open roles in sales"]}',
 }
 
-# Free models on OpenRouter with good JSON output
 OPENROUTER_MODELS = [
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "mistralai/mistral-7b-instruct:free",
-    "google/gemma-2-9b-it:free",
+    "deepseek/deepseek-v4-flash:free",
+    "google/gemma-4-31b-it:free",
+    "poolside/laguna-xs.2:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
 ]
 
 
@@ -114,7 +114,7 @@ class LLMService:
             providers.append(("Gemini", self.gemini))
         if self.groq:
             providers.append(("Groq", self.groq))
-        # Try all OpenRouter free models as fallback
+        # Try all OpenRouter free models as last resort
         for i, or_client in enumerate(self.openrouter_clients):
             model_name = OPENROUTER_MODELS[i].split("/")[-1]
             providers.append((f"OpenRouter({model_name})", or_client))

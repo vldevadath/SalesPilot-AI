@@ -178,11 +178,10 @@ async def run_research_pipeline(
     # ═══════════════════════════════════════════════════════
     await _emit(event_queue, "crm", AgentStatus.PENDING, "Ready — click 'Sync to HubSpot' to push data")
 
-    # Determine final status: failed if critical data is missing
-    has_profile = bool(report.company_profile and report.company_profile.name)
-    has_intent  = bool(report.buying_intent and report.buying_intent.overall_score > 0)
+    # Intent score is the core output — failed if it's missing
+    has_intent = bool(report.buying_intent and report.buying_intent.overall_score > 0)
 
-    if not has_profile and not has_intent:
+    if not has_intent:
         report.status = JobStatus.FAILED
     else:
         report.status = JobStatus.COMPLETE

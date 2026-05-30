@@ -10,10 +10,13 @@ class Settings(BaseSettings):
     # LLM Provider (Google Gemini - primary)
     google_api_key: str = ""
 
-    # Groq - fallback LLM (30 req/min free)
+    # Groq - 2nd fallback
     groq_api_key: str = ""
 
-    # OpenRouter - 3rd fallback (free models)
+    # Cerebras - 3rd fallback (fast, separate quota)
+    cerebras_api_key: str = ""
+
+    # OpenRouter - 4th fallback (free models)
     openrouter_api_key: str = ""
 
     # Bright Data ($250 Hackathon Credit)
