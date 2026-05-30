@@ -2,9 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy backend requirements and install dependencies
+# Install uv (blazing fast Rust-based Python package installer)
+RUN pip install --no-cache-dir uv
+
+# Copy backend requirements and install dependencies with uv (solves pip hanging issue)
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --system --no-cache-dir -r requirements.txt
 
 # Copy the entire backend app
 COPY backend/ .
