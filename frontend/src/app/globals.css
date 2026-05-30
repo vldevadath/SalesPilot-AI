@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0a;
+  --color-card: #111111;
+  --color-border: #222222;
+  --color-border-hover: #333333;
+  --color-accent: #e5a00d;
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #888888;
+  --color-text-muted: #555555;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: #0a0a0a;
+  color: #e5e5e5;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #e5a00d;
+  color: #000;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #333; }
+
+.intent-gauge {
+  background: conic-gradient(#e5a00d calc(var(--value) * 1%), #222 0);
+  border-radius: 50%;
+}
+.intent-gauge-inner {
+  background-color: #111111;
+  border-radius: 50%;
+}
+
+/* Hide Next.js dev mode indicator */
+nextjs-portal { display: none !important; }
+body > nextjs-portal { display: none !important; }
