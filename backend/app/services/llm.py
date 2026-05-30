@@ -128,12 +128,12 @@ class LLMService:
         messages = self._build_messages(system_prompt, user_prompt, example)
 
         providers = []
-        if getattr(self, "nvidia", None):
-            providers.append(("NVIDIA", self.nvidia))
-        if self.gemini:
-            providers.append(("Gemini", self.gemini))
         if self.groq:
             providers.append(("Groq", self.groq))
+        if self.gemini:
+            providers.append(("Gemini", self.gemini))
+        if getattr(self, "nvidia", None):
+            providers.append(("NVIDIA", self.nvidia))
         if getattr(self, "cerebras", None):
             providers.append(("Cerebras", self.cerebras))
         # Try all OpenRouter free models
@@ -166,12 +166,12 @@ class LLMService:
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=user_prompt)]
 
         providers = []
-        if getattr(self, "nvidia", None):
-            providers.append(("NVIDIA", self.nvidia))
-        if self.gemini:
-            providers.append(("Gemini", self.gemini))
         if self.groq:
             providers.append(("Groq", self.groq))
+        if self.gemini:
+            providers.append(("Gemini", self.gemini))
+        if getattr(self, "nvidia", None):
+            providers.append(("NVIDIA", self.nvidia))
         if getattr(self, "cerebras", None):
             providers.append(("Cerebras", self.cerebras))
         if self.openrouter:

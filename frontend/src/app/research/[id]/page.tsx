@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
-  getResearchResults, streamResearch, syncToCRM,
+  getResearchResults, streamResearch,
   type FullResearchReport, type AgentStatusEvent,
 } from "@/lib/api";
 
@@ -16,7 +16,6 @@ const AGENTS = [
   { key: "competitor",     label: "Competitors",       desc: "Mapped primary market rivals.", icon: "compare_arrows" },
   { key: "intent_scoring", label: "Intent Scoring",    desc: "Calculating aggregate buyer intent...", icon: "lightbulb" },
   { key: "email",          label: "Outreach Drafts",   desc: "Awaiting intent data.", icon: "mail" },
-  { key: "crm",            label: "CRM Sync",          desc: "Final step.", icon: "sync" },
 ];
 
 /** Estimate deal value based on company size and funding */
@@ -62,7 +61,6 @@ export default function ResearchPage() {
   const [results, setResults]   = useState<FullResearchReport | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied]     = useState(false);
-  const [syncing, setSyncing]   = useState(false);
   const [expanded, setExpanded] = useState<number | null>(0);
   const esRef = useRef<EventSource | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -104,8 +102,6 @@ export default function ResearchPage() {
 
     if (data.outreach_drafts?.length > 0) s["email"] = "complete";
     else if (isJobRunning && data.buying_intent != null) s["email"] = "running";
-
-    if (data.crm_synced) s["crm"] = "complete";
     
     return s;
   }
@@ -195,12 +191,6 @@ export default function ResearchPage() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [results, activeTab]);
-
-  const handleSync = useCallback(async () => {
-    setSyncing(true);
-    try { await syncToCRM(jobId); } catch { /* ok */ }
-    setSyncing(false);
-  }, [jobId]);
 
   const done = Object.values(statuses).filter(s => s === "complete").length;
 
@@ -404,14 +394,6 @@ export default function ResearchPage() {
               <span className="material-symbols-outlined text-[18px]">link</span>
               Copy Link
             </button>
-            <button 
-              onClick={handleSync}
-              disabled={syncing || r.crm_synced}
-              className={`px-5 py-2 text-sm font-bold text-black rounded-lg transition-all flex items-center gap-2 ${r.crm_synced ? 'bg-[#22c55e]' : 'bg-[#e5a00d] hover:brightness-110 shadow-[0_0_15px_rgba(229,160,13,0.3)] hover:shadow-[0_0_20px_rgba(229,160,13,0.5)]'}`}
-            >
-              <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
-              {r.crm_synced ? "Synced to HubSpot" : syncing ? "Pushing..." : "Push to HubSpot"}
-            </button>
           </div>
         </div>
       </header>
@@ -606,21 +588,6 @@ export default function ResearchPage() {
           )}
         </div>
       </main>
-
-      {/* Footer Action (Mobile/bottom sticky like design) */}
-      <div className="w-full bg-[#111111] border-t border-[#1e1e1e] mt-auto">
-        <div className="max-w-[1600px] mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-[#888888] font-medium text-sm text-center md:text-left">
-            Sync all enriched data including intent score, contacts, and signals to your CRM
-          </div>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <button className="flex-1 md:flex-none px-5 py-2 text-sm font-bold text-black bg-[#e5a00d] rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(229,160,13,0.3)]" onClick={handleSync}>
-              <span className="material-symbols-outlined text-[18px]">sync</span>
-              {r.crm_synced ? "Synced" : syncing ? "Pushing..." : "HubSpot Sync"}
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

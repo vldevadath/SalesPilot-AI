@@ -92,7 +92,7 @@ async def run_research_pipeline(
     # Emit pending status for all agents
     agent_names = [
         "research", "hiring", "news", "techstack", "painpoint", "competitor",
-        "intent_scoring", "email", "crm",
+        "intent_scoring", "email",
     ]
     for name in agent_names:
         await _emit(event_queue, name, AgentStatus.PENDING)
@@ -184,11 +184,6 @@ async def run_research_pipeline(
         save_job(report)
     else:
         await _emit(event_queue, "email", AgentStatus.ERROR, "Skipped — no intent score available")
-
-    # ═══════════════════════════════════════════════════════
-    # PHASE 4: CRM (mark as pending — user triggers manually)
-    # ═══════════════════════════════════════════════════════
-    await _emit(event_queue, "crm", AgentStatus.PENDING, "Ready — click 'Sync to HubSpot' to push data")
 
     # Intent score is the core output — failed if it's missing
     has_intent = bool(report.buying_intent and report.buying_intent.overall_score > 0)
