@@ -5,15 +5,15 @@ python-dotenv==1.0.1
 python-multipart==0.0.9
 
 # AI & Agents
-langgraph>=0.2.53
-langchain>=0.3.7
-langchain-core>=0.3.17
-langchain-google-genai>=2.0.7
-langchain-groq>=0.2.1
-langchain-openai>=0.2.9
-langchain-community>=0.3.7
-langchain-mcp-adapters>=0.1.0
-google-generativeai>=0.8.3
+langgraph
+langchain
+langchain-core
+langchain-google-genai
+langchain-groq
+langchain-openai
+langchain-community
+langchain-mcp-adapters
+google-generativeai
 
 # LLM Providers
 groq==0.11.0
