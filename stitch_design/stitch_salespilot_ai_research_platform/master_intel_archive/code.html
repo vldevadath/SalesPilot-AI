@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Master Intel Archive - SalesPilot AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#855300",
+                        "primary-fixed": "#ffddb8",
+                        "on-error": "#690005",
+                        "on-surface": "#d4e4fa",
+                        "secondary-fixed": "#d7e3fb",
+                        "primary-container": "#f59e0b",
+                        "tertiary-container": "#b1b1b1",
+                        "on-secondary-container": "#adb9d0",
+                        "outline-variant": "#534434",
+                        "tertiary": "#cccccc",
+                        "on-tertiary-container": "#444444",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#273647",
+                        "secondary-fixed-dim": "#bbc7de",
+                        "outline": "#a08e7a",
+                        "surface-container-highest": "#273647",
+                        "surface-container-high": "#1c2b3c",
+                        "on-secondary-fixed": "#101c2d",
+                        "inverse-on-surface": "#233143",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "surface-dim": "#051424",
+                        "secondary": "#bbc7de",
+                        "background": "#051424",
+                        "on-primary": "#472a00",
+                        "primary-fixed-dim": "#ffb95f",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed-variant": "#653e00",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "tertiary-fixed": "#e2e2e2",
+                        "primary": "#ffc174",
+                        "on-surface-variant": "#d8c3ad",
+                        "inverse-surface": "#d4e4fa",
+                        "on-secondary": "#263143",
+                        "surface-bright": "#2c3a4c",
+                        "on-primary-fixed": "#2a1700",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary": "#303030",
+                        "secondary-container": "#3e495d",
+                        "surface": "#051424",
+                        "surface-container-low": "#0d1c2d",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#613b00",
+                        "surface-tint": "#ffb95f",
+                        "surface-container": "#122131",
+                        "on-background": "#d4e4fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "column-gap": "24px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Sora"],
+                        "body-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-md": ["Sora"],
+                        "mono-data": ["Sora"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #000000; color: #d4e4fa; }
+        .glass-panel { background: rgba(8, 20, 37, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-panel-active { border: 1px solid rgba(245, 158, 11, 0.3); }
+        .glow-ember { text-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
+        .ember-border { border-color: #f59e0b; }
+        .table-row-hover:hover { background: rgba(255, 255, 255, 0.02); }
+        
+        /* Sparkline simple CSS bars */
+        .sparkline-container { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+        .spark-bar { width: 4px; background-color: #534434; border-radius: 1px; }
+        .spark-bar.active { background-color: #f59e0b; box-shadow: 0 0 4px rgba(245, 158, 11, 0.4); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- TopNavBar (Mobile Only / Tablet - hidden on desktop as per layout rules generally, but JSON requested it docked top-0) -->
+<nav class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface/80 backdrop-blur-xl border-b border-white/10 transition-all duration-200 active:scale-95">
+<div class="font-display-lg text-headline-md font-bold tracking-tighter text-primary">SalesPilot AI</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/5 p-1 rounded">notifications</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/5 p-1 rounded">settings</span>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="hidden md:flex fixed left-0 top-0 bottom-0 w-64 flex-col z-40 bg-surface-container-low border-r border-white/10 transition-all duration-150">
+<div class="p-6 border-b border-white/10">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tighter">SalesPilot AI</h1>
+<div class="mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT overflow-hidden glass-panel border-white/10">
+<img alt="Agent Status System" class="w-full h-full object-cover grayscale opacity-80" data-alt="A futuristic, high-contrast black and white portrait of a professional system operator, evoking an aerospace command center atmosphere. The lighting is cinematic, casting deep shadows against a dark technical background. It embodies a sense of focus, reliability, and elite performance within a dark minimalist UI setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyaBwgO31YRePCDr2U8LlMuBF2LiPvN2N4Tui_7SmGf-bHs8_t3FYwvCaa7pjHj2jeFcV3PdHvS9rWzybtOoobFv59m1oKJfyLCVPkmyrjc2OtR8t3uCTwk6FMYPRHtBSx_BoXWm5tSWcV7A6fc5Hcp-R638vu0DOfoUrh2XNyc4qNfB2cUdMIiVnKgf-7QMu8wM-Ic-Byot8uVlqSDY-YEdgvUpSywZZ6GYQHkgckHpTi4p0i3DaKKcMRhwbu5B0EkChAGbOhyS59"/>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Command Center</div>
+<div class="font-label-md text-[10px] text-primary-container mt-1 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span> System Nominal
+                    </div>
+</div>
+</div>
+<button class="w-full mt-6 bg-primary-container text-[#000000] font-label-md text-label-md py-2 px-4 rounded-DEFAULT hover:bg-primary-fixed-dim transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> Deploy New Agent
+            </button>
+</div>
+<nav class="flex-1 py-4 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Mission Control</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">smart_toy</span>
+<span class="font-label-md text-label-md">Agent Hive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">radar</span>
+<span class="font-label-md text-label-md">Lead Signals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 transition-colors group relative" href="#">
+<!-- Active Indicator handled by border-l-2 in class -->
+<span class="material-symbols-outlined text-[20px] glow-ember">insights</span>
+<span class="font-label-md text-label-md">Intel Stream</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10 mt-auto">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="font-label-md text-label-md">Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors group rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pt-16 md:pt-0 min-h-screen flex flex-col bg-[#000000] relative">
+<!-- Ambient Grid Background -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 32px 32px;"></div>
+<!-- Header / Filter Bar -->
+<header class="px-margin-desktop py-6 border-b border-white/10 glass-panel z-10 sticky top-0 md:top-0">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tighter">Master Intel Archive</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Archived intelligence streams and intent signals.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+<!-- Search Input -->
+<div class="relative w-full md:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-[#040a12] border border-surface-variant text-on-surface font-mono-data text-mono-data py-2 pl-9 pr-3 rounded-DEFAULT focus:border-primary-container focus:ring-0 focus:outline-none transition-colors placeholder:text-surface-variant" placeholder="Query archive..." type="text"/>
+</div>
+<!-- Filters -->
+<button class="glass-panel px-3 py-2 rounded-DEFAULT font-label-md text-label-md text-on-surface hover:border-surface-variant flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Industry
+                    </button>
+<button class="glass-panel px-3 py-2 rounded-DEFAULT font-label-md text-label-md text-on-surface hover:border-surface-variant flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]">sort</span> Score: High
+                    </button>
+<button class="glass-panel px-3 py-2 rounded-DEFAULT font-label-md text-label-md text-on-surface hover:border-surface-variant flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 30D
+                    </button>
+</div>
+</div>
+</header>
+<!-- Data Table Container -->
+<div class="flex-1 p-margin-desktop overflow-hidden flex flex-col z-10">
+<div class="glass-panel rounded-DEFAULT overflow-hidden flex-1 flex flex-col">
+<!-- Table Header -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 bg-[#040a12]/50 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider sticky top-0">
+<div class="col-span-3">Target Entity</div>
+<div class="col-span-2">Sector</div>
+<div class="col-span-2">Intent Signature</div>
+<div class="col-span-2">Last Intercept</div>
+<div class="col-span-2">Sync Node</div>
+<div class="col-span-1 text-right">Ops</div>
+</div>
+<!-- Table Body -->
+<div class="flex-1 overflow-y-auto">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 table-row-hover items-center transition-colors">
+<div class="col-span-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-container-high border border-white/10 flex items-center justify-center font-display-lg text-[14px] text-primary">A</div>
+<div>
+<div class="font-mono-data text-mono-data text-on-surface">Apex Dynamics</div>
+<div class="font-label-md text-[10px] text-on-surface-variant mt-1">ID: APX-992</div>
+</div>
+</div>
+<div class="col-span-2 font-body-md text-body-md text-on-surface">Aerospace Defense</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="font-mono-data text-mono-data text-primary-container">98.4</span>
+<div class="sparkline-container">
+<div class="spark-bar h-[4px]"></div>
+<div class="spark-bar h-[8px]"></div>
+<div class="spark-bar h-[12px] active"></div>
+<div class="spark-bar h-[16px] active"></div>
+</div>
+</div>
+<div class="col-span-2 font-mono-data text-mono-data text-on-surface-variant">2023-10-24 14:32Z</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-[#040a12] border border-white/10 font-label-md text-[10px] text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Synced CRM
+                            </span>
+</div>
+<div class="col-span-1 flex justify-end gap-2 text-on-surface-variant">
+<button class="hover:text-primary transition-colors" title="Inspect Data"><span class="material-symbols-outlined text-[18px]">data_object</span></button>
+<button class="hover:text-primary transition-colors" title="Export Stream"><span class="material-symbols-outlined text-[18px]">download</span></button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 table-row-hover items-center transition-colors">
+<div class="col-span-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-container-high border border-white/10 flex items-center justify-center font-display-lg text-[14px] text-on-surface">Q</div>
+<div>
+<div class="font-mono-data text-mono-data text-on-surface">Quantum Logistics</div>
+<div class="font-label-md text-[10px] text-on-surface-variant mt-1">ID: QNT-104</div>
+</div>
+</div>
+<div class="col-span-2 font-body-md text-body-md text-on-surface">Global Supply</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="font-mono-data text-mono-data text-on-surface">62.1</span>
+<div class="sparkline-container">
+<div class="spark-bar h-[8px] active"></div>
+<div class="spark-bar h-[10px]"></div>
+<div class="spark-bar h-[6px]"></div>
+<div class="spark-bar h-[4px]"></div>
+</div>
+</div>
+<div class="col-span-2 font-mono-data text-mono-data text-on-surface-variant">2023-10-23 09:15Z</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-[#040a12] border border-white/10 font-label-md text-[10px] text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Pending
+                            </span>
+</div>
+<div class="col-span-1 flex justify-end gap-2 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">data_object</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">download</span></button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 table-row-hover items-center transition-colors">
+<div class="col-span-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-container-high border border-white/10 flex items-center justify-center font-display-lg text-[14px] text-on-surface">V</div>
+<div>
+<div class="font-mono-data text-mono-data text-on-surface">Vanguard Biotech</div>
+<div class="font-label-md text-[10px] text-on-surface-variant mt-1">ID: VBG-773</div>
+</div>
+</div>
+<div class="col-span-2 font-body-md text-body-md text-on-surface">Life Sciences</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="font-mono-data text-mono-data text-primary-container">88.9</span>
+<div class="sparkline-container">
+<div class="spark-bar h-[2px]"></div>
+<div class="spark-bar h-[6px]"></div>
+<div class="spark-bar h-[12px] active"></div>
+<div class="spark-bar h-[14px] active"></div>
+</div>
+</div>
+<div class="col-span-2 font-mono-data text-mono-data text-on-surface-variant">2023-10-22 18:45Z</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-[#040a12] border border-white/10 font-label-md text-[10px] text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Synced CRM
+                            </span>
+</div>
+<div class="col-span-1 flex justify-end gap-2 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">data_object</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">download</span></button>
+</div>
+</div>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="px-6 py-3 border-t border-white/10 bg-[#040a12]/80 flex justify-between items-center font-mono-data text-[12px] text-on-surface-variant">
+<div>Showing 1-3 of 2,048 records</div>
+<div class="flex gap-2">
+<button class="px-2 py-1 border border-white/10 rounded hover:bg-white/5 transition-colors disabled:opacity-50" disabled="">PREV</button>
+<button class="px-2 py-1 border border-white/10 rounded hover:bg-white/5 transition-colors">NEXT</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

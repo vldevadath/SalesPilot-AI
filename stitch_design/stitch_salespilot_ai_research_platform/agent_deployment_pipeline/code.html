@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agent Deployment Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#855300",
+                        "primary-fixed": "#ffddb8",
+                        "on-error": "#690005",
+                        "on-surface": "#d4e4fa",
+                        "secondary-fixed": "#d7e3fb",
+                        "primary-container": "#f59e0b",
+                        "tertiary-container": "#b1b1b1",
+                        "on-secondary-container": "#adb9d0",
+                        "outline-variant": "#534434",
+                        "tertiary": "#cccccc",
+                        "on-tertiary-container": "#444444",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#273647",
+                        "secondary-fixed-dim": "#bbc7de",
+                        "outline": "#a08e7a",
+                        "surface-container-highest": "#273647",
+                        "surface-container-high": "#1c2b3c",
+                        "on-secondary-fixed": "#101c2d",
+                        "inverse-on-surface": "#233143",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "surface-dim": "#051424",
+                        "secondary": "#bbc7de",
+                        "background": "#051424",
+                        "on-primary": "#472a00",
+                        "primary-fixed-dim": "#ffb95f",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed-variant": "#653e00",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "tertiary-fixed": "#e2e2e2",
+                        "primary": "#ffc174",
+                        "on-surface-variant": "#d8c3ad",
+                        "inverse-surface": "#d4e4fa",
+                        "on-secondary": "#263143",
+                        "surface-bright": "#2c3a4c",
+                        "on-primary-fixed": "#2a1700",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary": "#303030",
+                        "secondary-container": "#3e495d",
+                        "surface": "#051424",
+                        "surface-container-low": "#0d1c2d",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#613b00",
+                        "surface-tint": "#ffb95f",
+                        "surface-container": "#122131",
+                        "on-background": "#d4e4fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "column-gap": "24px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Sora"],
+                        "body-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-md": ["Sora"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "mono-data": ["11px", { "lineHeight": "1.4", "letterSpacing": "0em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #d4e4fa;
+            font-family: 'Sora', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background-color: rgba(8, 20, 37, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-panel-active {
+            background-color: rgba(8, 20, 37, 0.9);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
+        }
+        
+        .monospaced-log {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .ember-pulse {
+            animation: pulse-ember 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ember {
+            0%, 100% { opacity: 1; box-shadow: 0 0 4px #f59e0b; }
+            50% { opacity: .5; box-shadow: none; }
+        }
+
+        .progress-stripe {
+            background-image: linear-gradient(
+                -45deg, 
+                rgba(0,0,0,0.15) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(0,0,0,0.15) 50%, 
+                rgba(0,0,0,0.15) 75%, 
+                transparent 75%, 
+                transparent
+            );
+            background-size: 20px 20px;
+            animation: move-stripes 1s linear infinite;
+        }
+
+        @keyframes move-stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #051424;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #273647;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #534434;
+        }
+    </style>
+</head>
+<body class="bg-black text-on-surface h-screen flex overflow-hidden">
+<!-- TopNavBar (Web Only) -->
+<nav class="hidden md:flex fixed top-0 left-0 w-full z-50 justify-between items-center px-gutter h-16 bg-surface/80 backdrop-blur-xl border-b border-white/10 transition-all duration-200">
+<div class="flex items-center gap-6">
+<div class="font-display-lg text-headline-md font-bold tracking-tighter text-primary">SalesPilot AI</div>
+<div class="flex items-center gap-1">
+<a class="px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 rounded transition-colors font-body-md text-body-md" href="#">Network</a>
+<a class="px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 rounded transition-colors font-body-md text-body-md" href="#">Intelligence</a>
+<a class="px-3 py-2 text-primary border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Automations</a>
+<a class="px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 rounded transition-colors font-body-md text-body-md" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-white/5 p-2 rounded transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-white/5 p-2 rounded transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-white/10">
+<img alt="Chief Revenue Officer Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a mature male executive in a dark tailored suit, conveying authority and experience. The lighting is dramatic and cinematic, with strong contrasts emphasizing the serious, focused mood. The background is a deeply blurred, modern corporate environment in cool, dark tones, reinforcing the high-stakes, elite command center aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXMhLk30jMKya6FiChC1eFu2MGZk06DY0ZO7FGPP9sTrKV-rNOEYIpdQT-ZeluvYz0RH_AP6aI07K14qBx1V2COJVM8_QqzUcEmEEvr_dzZCZHnuNC1TiTEvLDYeMf5iW1FRTEDqo5Qm4AcCV13it8EE9fxhRWxwReN7fnyrPr6e92TzIDb74uX3w6Tuek4y0vE6EgC6r4HMTnItxSNJ3lqVEYj8ebADSG-Ymu-jjbttINGOJLOnd2Hs_-n_L647RjC3zFc7KSZ7oQ"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-16 bottom-0 w-64 z-40 bg-surface-container-low border-r border-white/10 transition-all duration-150">
+<div class="p-4 border-b border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded bg-surface-variant flex items-center justify-center border border-white/10 overflow-hidden">
+<img alt="Agent Status System" class="w-full h-full object-cover" data-alt="A stylized, abstract technological icon representing an AI command system. It features glowing amber and soft blue geometric patterns against a deep, true black background. The image has a highly technical, precision-engineered feel, resembling a high-end radar or data processing core from a futuristic control room. The lighting is moody and sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGuwT2HFYXaR5zJ4RvEZjuGPo_uNRBJkLhW1StANLeqXIMa8IyjPlA-b-x9CF20dUqJWckxfwazVFnhY-mgfZeMZ0-CeqQs1O_C5z1WqY0_VgWrfCQtMI1eJSZEYVWh6h-jMTgposhHDj4Dq6CTQ0cWSF26ysvebzT9T5rPLjVRTjssVbvaHFrmHqP_OWJNWRx4DhAkL3deCbl1RBD4l321akS1moBfzC9G_kgxOugtS13TxvpEP8I0thWzl6NOzv2LsVP9Xbcj71U"/>
+</div>
+<div>
+<h2 class="font-headline-md text-body-lg text-primary truncate">Command Center</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">System Nominal</p>
+</div>
+</div>
+<button class="w-full bg-primary-container text-black font-label-md text-label-md py-2 px-4 rounded hover:bg-primary-fixed transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> Deploy New Agent
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto py-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Mission Control</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary border-l-2 border-primary bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-md text-label-md">Agent Hive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="font-label-md text-label-md">Lead Signals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">Intel Stream</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/5">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="font-label-md text-label-md">Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col md:ml-64 mt-16 md:mt-16 h-[calc(100vh-4rem)] bg-background relative overflow-hidden">
+<!-- Header / Terminal Identity -->
+<header class="px-margin-desktop py-6 border-b border-white/10 shrink-0 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="w-2 h-2 rounded-full bg-primary-container ember-pulse"></span>
+<span class="font-mono-data text-mono-data text-primary uppercase tracking-widest">DEPLOYMENT ACTIVE // SEC: 0x8A4</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface">Acme Corp Deep Dive</h1>
+</div>
+<div class="text-right">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">OVERALL COMPLETION</div>
+<div class="flex items-center gap-3">
+<span class="font-headline-md text-headline-md text-primary">68%</span>
+<div class="w-32 h-2 bg-surface-variant rounded overflow-hidden">
+<div class="h-full bg-primary-container w-[68%]"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Command Pipeline Visualization -->
+<div class="flex-1 overflow-y-auto p-margin-desktop space-y-unit">
+<!-- Modular Agent Cards (9 Agents) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Agent 1: Completed -->
+<div class="glass-panel p-4 rounded-lg flex flex-col h-48 opacity-70">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">database</span>
+<span class="font-label-md text-label-md text-on-surface">Data Ingestion</span>
+</div>
+<span class="px-2 py-1 bg-surface-variant text-tertiary font-mono-data text-mono-data rounded">DONE</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-2 rounded border border-white/5 overflow-hidden">
+<div class="font-mono-data text-mono-data text-on-surface-variant opacity-50 space-y-1">
+<div>&gt; Initializing connection... OK</div>
+<div>&gt; Fetching CRM records... 1,024 found</div>
+<div>&gt; Normalizing schemas... OK</div>
+<div class="text-tertiary">&gt; Process completed in 1.2s</div>
+</div>
+</div>
+<div class="mt-3 h-1 bg-surface-variant rounded overflow-hidden">
+<div class="h-full bg-tertiary w-full"></div>
+</div>
+</div>
+<!-- Agent 2: Active (Ember) -->
+<div class="glass-panel-active p-4 rounded-lg flex flex-col h-48">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container ember-pulse">psychology</span>
+<span class="font-label-md text-label-md text-primary">Sentiment Analysis</span>
+</div>
+<span class="px-2 py-1 bg-primary-container/20 text-primary-container font-mono-data text-mono-data rounded border border-primary-container/30">ACTIVE</span>
+</div>
+<div class="flex-1 bg-black p-2 rounded border border-white/10 overflow-hidden relative">
+<div class="font-mono-data text-mono-data text-on-surface-variant space-y-1 animate-pulse">
+<div>&gt; Scraping recent press releases...</div>
+<div>&gt; Analyzing tone...</div>
+<div class="text-primary">&gt; Detected: Cautious Optimism (0.64)</div>
+<div>&gt; Parsing executive quotes... _</div>
+</div>
+</div>
+<div class="mt-3 h-1 bg-surface-variant rounded overflow-hidden">
+<div class="h-full bg-primary-container w-[45%] progress-stripe"></div>
+</div>
+</div>
+<!-- Agent 3: Pending -->
+<div class="glass-panel p-4 rounded-lg flex flex-col h-48 opacity-40">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-surface-variant">account_tree</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Decision Mapping</span>
+</div>
+<span class="px-2 py-1 bg-surface-dim text-surface-variant font-mono-data text-mono-data rounded">QUEUED</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-2 rounded border border-white/5 flex items-center justify-center">
+<span class="font-mono-data text-mono-data text-surface-variant">Waiting for upstream dependencies...</span>
+</div>
+<div class="mt-3 h-1 bg-surface-variant rounded overflow-hidden">
+<div class="h-full bg-surface-dim w-0"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
