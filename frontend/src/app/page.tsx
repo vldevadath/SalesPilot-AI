@@ -75,8 +75,6 @@ export default function HomePage() {
             </a>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium">
               <a className="text-[#e5a00d] border-b-2 border-[#e5a00d] py-3 px-1" href="#">Dashboard</a>
-              <a className="text-[#888888] hover:text-[#e5e5e5] transition-colors py-3 px-1" href="#">Signals</a>
-              <a className="text-[#888888] hover:text-[#e5e5e5] transition-colors py-3 px-1" href="#">History</a>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -290,7 +288,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-[#1e1e1e] py-6 px-6 bg-[#0a0a0a]">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-['Geist_Mono',monospace] text-[#555555] uppercase tracking-widest">
-          <span>© 2025 SalesPilot AI</span>
+          <span>© 2026 SalesPilot AI</span>
           <span>Powered by Bright Data · 8 data sources active</span>
         </div>
       </footer>
