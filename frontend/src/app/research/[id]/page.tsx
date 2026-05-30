@@ -343,7 +343,7 @@ export default function ResearchPage() {
         </div>
       </header>
 
-      <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-20">
+      <main className="flex-grow w-full max-w-[1600px] mx-auto px-6 pb-20">
         <section className="py-10 border-b border-[#1e1e1e] flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
           <div className="flex flex-col gap-4 flex-1">
             <div className="text-[#888888] font-['Geist_Mono',monospace] text-[11px] uppercase tracking-widest flex items-center gap-2">
@@ -400,11 +400,11 @@ export default function ResearchPage() {
           </div>
         </section>
 
-        <div className="mt-8 grid grid-cols-1 xl:grid-cols-12 gap-10">
+        <div className={`mt-8 grid grid-cols-1 gap-10 ${drafts && drafts.length > 0 ? 'xl:grid-cols-12' : ''}`}>
           {/* Left Column (Stats & Intel) */}
-          <div className="xl:col-span-7 flex flex-col gap-10">
+          <div className={`${drafts && drafts.length > 0 ? 'xl:col-span-8' : 'w-full'} flex flex-col gap-10`}>
             {cp?.description && (
-              <p className="text-sm text-[#888888] leading-relaxed">{cp.description}</p>
+              <p className="text-sm text-[#888888] leading-relaxed max-w-5xl">{cp.description}</p>
             )}
 
           {bi?.top_reasons && bi.top_reasons.length > 0 && (
@@ -491,8 +491,8 @@ export default function ResearchPage() {
           </div>
 
           {/* Right Column (Outreach Drafts) */}
-          <div className="xl:col-span-5">
-            {drafts && drafts.length > 0 && (
+          {drafts && drafts.length > 0 && (
+            <div className="xl:col-span-4">
               <div className="sticky top-[100px]">
               <div className="flex items-center gap-2 mb-4">
                 <span className="material-symbols-outlined text-[#e5a00d] text-[18px]">mail</span>
@@ -528,15 +528,14 @@ export default function ResearchPage() {
                   {drafts[activeTab].body}
                 </div>
               </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </main>
 
       {/* Footer Action (Mobile/bottom sticky like design) */}
       <div className="w-full bg-[#111111] border-t border-[#1e1e1e] mt-auto">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="max-w-[1600px] mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-[#888888] font-medium text-sm text-center md:text-left">
             Sync all enriched data including intent score, contacts, and signals to your CRM
           </div>
